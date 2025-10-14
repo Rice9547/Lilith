@@ -18,9 +18,11 @@ const listConfigurations = list({
     }),
     email: text({
       label: 'email',
-      validation: { isRequired: true },
       isIndexed: 'unique',
       isFilterable: true,
+      db: {
+        isNullable: true,
+      },
     }),
     state: select({
       label: '狀態',
@@ -40,6 +42,14 @@ const listConfigurations = list({
         isNullable: true,
       },
     }),
+  },
+
+  hooks: {
+    validateInput: async ({ resolvedData, addValidationError }) => {
+      if (!resolvedData.email && !resolvedData.mobile) {
+        addValidationError('email 或 mobile 至少需要填寫一個')
+      }
+    },
   },
 
   ui: {
